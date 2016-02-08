@@ -1,0 +1,10 @@
+/*
+ * Styles for Points of Interest Map Application
+ * (Fill in as desired)
+ *
+ * These should not conflict with bootstrap's CSS, but they may
+ * add more specific styles.
+ */
+#map {
+    height: 180px;
+}
