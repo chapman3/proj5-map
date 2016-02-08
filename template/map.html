@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Map Project</title>
+
+  <!-- 'viewport' is used by bootstrap to respond to device size -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Javascript:  JQuery from a content distribution network (CDN) -->
+  <script
+     src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
+  </script>
+
+  <!-- Leaflet.js -->
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+  <script
+          src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js">
+  </script>
+
+  <script src="http://www.mapquestapi.com/sdk/leaflet/v2.s/mq-map.js?key=9qlco5yKsQn51WFFKDD6y9t51P0GNHaQ"></script>
+
+  <script src="http://www.mapquestapi.com/sdk/leaflet/v2.s/mq-geocoding.js?key=9qlco5yKsQn51WFFKDD6y9t51P0GNHaQ"></script>
+
+  <!-- Bootstrap includes javascript and css  (must follow jquery) -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script
+          src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js">
+  </script>
+
+</head>
+
+   <!-- Our own style sheet -->
+   <link rel="stylesheet" href="/static/css/map.css" />
+
+<body>
+<!-- bootstrap requires a 'container' div around content -->
+<div class="container">
+
+<h1>Map Points of Interest</h1>
+<div id="map">
+
+</div>
+ <!--
+  -- If there are any warnings or other messages from a prior
+  -- request to the server,
+  -- they appear above the rest of the content, just until the next
+  -- action.  (This is only on request/response transactions that
+  -- result in regenerating the page, not on every xmlhttp request.)
+  -->
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<!-- Design on bootstrap grid -->
+<form role="form">
+<div class="row">
+  <div class="col-md-2">
+  </div>
+</div>
+
+</form>
+
+<script type="text/javascript">
+  window.onload = function() {
+    //default to university of oregon
+    var map = L.map('map', {layers: MQ.mapLayer()}).setView([44.0450, -123.0750], 13)
+
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    maxZoom: 18,
+    id: 'chapman3.cikea72yu00b59um5eg2cgxp5',
+    accessToken: 'pk.eyJ1IjoiY2hhcG1hbjMiLCJhIjoiY2lrZTljZzhnMDAzanVrbTJkc2t4YnBoeCJ9.AEtTFpJxZxI9J552_raNQA'
+}).addTo(map);
+
+  var poi_dict = {{session.poi_dict|safe}}
+  for (location in poi){
+  var marker = L.marker([location[0], location[1]).addTo(map).bindPopup(location[2]).openPopup();
+  }
+
+  function onMapClick(e) {
+    alert(e.latlng);
+}
+
+map.on('click', onMapClick);
+
+</script>
+
+</div>
+</body> </html>
