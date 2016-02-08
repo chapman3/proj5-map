@@ -13,7 +13,6 @@ from flask import jsonify # For AJAX transactions
 import json
 import logging
 
-import brevet_calc
 # Date handling
 import arrow # Replacement for datetime, based on moment.js
 import datetime # But we still need time
